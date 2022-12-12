@@ -1,0 +1,65 @@
+<html>
+	<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <base target="_blank">
+    <style>
+    .body {
+        background:#f7f7f7;
+    }        
+    .content {
+        max-width: 500px;
+        margin: auto;
+        padding: 10px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/fundamental-styles@0.6.0/dist/fundamental-styles.css"/> 
+
+</head>
+
+	<body>
+        <script>
+            var xhttp = new XMLHttpRequest();
+            var token = "";
+            var restep = "http://localhost:4300/verify.json?token=";
+
+            var _onMessage = function(oEvent) {
+            console.log("EVENT CAPTURED >>>>" + JSON.stringify(oEvent.data))
+            //let data = oEvent.data
+            if (oEvent.data.id === "myfn-1") {
+                    var data = oEvent.data.payload.value;
+                    token = data.attached_data.idtoken;
+                    let url = restep + token;
+                    xhttp.open("GET", url , true);
+                    xhttp.send();
+                }
+            }
+
+        window.addEventListener("message", _onMessage);
+
+            (function() {
+                // your page initialization code here
+                // the DOM will be available here
+                window.parent.postMessage({type: "init", payload: false, id: "myfn-1"}, "*");
+            })();
+        
+            xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // action to be performed when the document is ready
+                let o = JSON.parse(this.responseText) 
+                let tbld  = "<tr><td><img src='http://localhost:4300/verified-icon.jpg' alt='verified-icon' width='50'></img></td><td>User email:</td><td>" + o.email + "</td></tr>"
+                + "<tr><td></td><td>Issued at:</td><td>" + o.friendlyiat + "</td></tr>"
+                + "<tr><td></td><td>Issuer:</td><td>" + o.issuer + "</td></tr>";
+
+                document.getElementById("tbl").innerHTML = tbld;
+            }
+        }
+        </script>
+        <div class="content">
+        <H2>Verified</H2>
+        <table id="tbl" ></table>
+        </div>
+ 	</body>
+</html>

@@ -1,0 +1,21 @@
+html
+  head
+    title=message
+  body
+    h2 Verified
+    
+    ul
+      table
+        tr         
+          td
+            img(src='/verified-icon.jpg' alt='verified by server' width='50px')
+          td User email:
+          td=useremail  
+        tr
+          td
+          td Issued at:
+          td=iat
+        tr
+          td
+          td Issued by:
+          td=iss

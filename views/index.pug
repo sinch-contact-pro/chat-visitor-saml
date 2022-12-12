@@ -1,0 +1,11 @@
+html
+  head
+    title= title
+  block scripts
+      script.
+        const idtoken = !{jsStringify(idtoken)};
+        const useremail = !{jsStringify(useremail)};
+      script(src='/chatopener.js')
+      script(src='/chatui.js')
+  body
+    h1= message
